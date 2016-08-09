@@ -1,0 +1,29 @@
+{
+  "name": "redial-ready",
+  "version": "0.0.1",
+  "description": "redial-ready",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf lib/ && ./node_modules/.bin/babel -d lib/ src/",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/foysavas/redial-ready.git"
+  },
+  "author": "Foy Savas <foy@sav.as> (http://foysavas.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/foysavas/redial-ready/issues"
+  },
+  "homepage": "https://github.com/foysavas/redial-ready#readme",
+  "dependencies": {
+    "react": "^15.3.0",
+    "redial": "^0.4.2",
+    "redial-waterfall": "0.0.2"
+  },
+  "devDependencies": {
+    "babel": "^5.8.38"
+  }
+}
