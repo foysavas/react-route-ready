@@ -37,9 +37,14 @@ export default class ReactRouteReadyContext extends React.Component {
 
   load(components, props) {
     const locals = this.context.store ? {
+      params: props.params,
+      location: props.location,
       dispatch: this.context.store.dispatch,
       getState: this.context.store.getState,
-    } : {};
+    } : {
+      params: props.params,
+      location: props.location,
+    };
     return getHookedPromiseChain(components, {
       locals,
       beforeAll: (components) => {
