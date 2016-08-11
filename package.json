@@ -1,6 +1,6 @@
 {
   "name": "react-route-ready",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Before hooks for react components using react-router",
   "main": "lib/index.js",
   "scripts": {

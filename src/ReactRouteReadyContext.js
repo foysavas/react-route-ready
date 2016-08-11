@@ -1,6 +1,7 @@
 import React from 'react';
 import getHookedComponents from './getHookedComponents';
 import getHookedPromiseChain from './getHookedPromiseChain';
+import getUnreadyComponents from './getUnreadyComponents';
 
 export default class ReactRouteReadyContext extends React.Component {
   static contextTypes = {
@@ -16,12 +17,14 @@ export default class ReactRouteReadyContext extends React.Component {
 
   static childContextTypes = {
     reactRouteReadyLoading: React.PropTypes.bool,
+    reactRouteReadyLoaded: React.PropTypes.bool,
     reactRouteReadyComponentStatus: React.PropTypes.object
   }
 
   getChildContext() {
     return {
       reactRouteReadyLoading: this.state.loading,
+      reactRouteReadyLoaded: this.state.loaded,
       reactRouteReadyComponentStatus: this.state.componentStatus
     }
   }
@@ -32,7 +35,8 @@ export default class ReactRouteReadyContext extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.location === this.props.location) { return; }
-    this.load(nextProps.components, nextProps);
+    const unreadyComponents = getUnreadyComponents(this.props,nextProps);
+    this.load(unreadyComponents, nextProps);
   }
 
   load(components, props) {
@@ -50,7 +54,7 @@ export default class ReactRouteReadyContext extends React.Component {
       beforeAll: (components) => {
         const componentStatus = new Map();
         for (let component of components) {
-          componentStatus.set(component, 'waiting');
+          componentStatus.set(component, 'queued');
         }
         this.setState({loading: true, componentStatus});
       },
@@ -65,7 +69,7 @@ export default class ReactRouteReadyContext extends React.Component {
         this.setState({componentStatus});
       },
       afterAll: (components) => {
-        this.setState({loading: false});
+        this.setState({loading: false, loaded: true});
       }
     })
   }
@@ -74,7 +78,8 @@ export default class ReactRouteReadyContext extends React.Component {
     super(props, context);
     this.state = this.state || {};
     this.state.componentStatus = new Map();
-    this.state.loading = true;
+    this.state.loading = false;
+    this.state.loaded = false;
   }
 
   render() {
