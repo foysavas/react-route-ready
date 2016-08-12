@@ -31,12 +31,17 @@ export default class ReactRouteReadyContext extends React.Component {
 
   componentDidMount() {
     this.load(this.props.components, this.props);
+    this.setStateIfMounted = this.setState;
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.location === this.props.location) { return; }
     const unreadyComponents = getUnreadyComponents(this.props,nextProps);
     this.load(unreadyComponents, nextProps);
+  }
+
+  componentWillUnmount() {
+    this.setStateIfMounted = function noop(){};
   }
 
   load(components, props) {
@@ -49,27 +54,26 @@ export default class ReactRouteReadyContext extends React.Component {
       params: props.params,
       location: props.location,
     };
+
+    const componentStatus = new Map();
+    for (let component of components) { componentStatus.set(component, 'queued'); }
+    this.setState({loading: true, componentStatus});
+
     return getHookedPromiseChain(components, {
       locals,
-      beforeAll: (components) => {
-        const componentStatus = new Map();
-        for (let component of components) {
-          componentStatus.set(component, 'queued');
-        }
-        this.setState({loading: true, componentStatus});
-      },
+      beforeAll: (components) => {},
       beforeEach: (component) => {
         const componentStatus = this.state.componentStatus;
         componentStatus.set(component, 'loading');
-        this.setState({componentStatus});
+        this.setStateIfMounted({componentStatus});
       },
       afterEach: (component) => {
         const componentStatus = this.state.componentStatus;
         componentStatus.set(component, 'loaded');
-        this.setState({componentStatus});
+        this.setStateIfMounted({componentStatus});
       },
       afterAll: (components) => {
-        this.setState({loading: false, loaded: true});
+        this.setStateIfMounted({loading: false, loaded: true});
       }
     })
   }
