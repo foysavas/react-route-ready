@@ -65,15 +65,21 @@ export default class ReactRouteReadyContext extends React.Component {
       beforeEach: (component) => {
         const componentStatus = this.state.componentStatus;
         componentStatus.set(component, 'loading');
-        this.setStateIfMounted({componentStatus});
+        if (this.props.location === props.location) {
+          this.setStateIfMounted({componentStatus});
+        }
       },
       afterEach: (component) => {
         const componentStatus = this.state.componentStatus;
         componentStatus.set(component, 'loaded');
-        this.setStateIfMounted({componentStatus});
+        if (this.props.location === props.location) {
+          this.setStateIfMounted({componentStatus});
+        }
       },
       afterAll: (components) => {
-        this.setStateIfMounted({loading: false, loaded: true});
+        if (this.props.location === props.location) {
+          this.setStateIfMounted({loading: false, loaded: true});
+        }
       }
     })
   }
