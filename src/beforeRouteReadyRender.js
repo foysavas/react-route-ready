@@ -16,7 +16,7 @@ export default function beforeRouteReadyRender(renderer) {
       const isStarting = !isRouteLoading && !wasRouteLoaded;
       const isCompLoading = isRouteLoading && (compStatus === "queued" || compStatus === "loading");
       if (isStarting || isCompLoading) {
-        return React.createElement(renderer);
+        return React.createElement(renderer, this.props);
       } else {
         return __render.apply(this);
       }
