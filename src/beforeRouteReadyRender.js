@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function beforeRouteReadyRender(renderer) {
   return (Component) => {
     Component.contextTypes = Object.assign(Component.contextTypes, {
-      reactRouteReadyLoading: React.PropTypes.bool.isRequired,
-      reactRouteReadyLoaded: React.PropTypes.bool.isRequired,
-      reactRouteReadyComponentStatus: React.PropTypes.object.isRequired
+      reactRouteReadyLoading: PropTypes.bool.isRequired,
+      reactRouteReadyLoaded: PropTypes.bool.isRequired,
+      reactRouteReadyComponentStatus: PropTypes.object.isRequired
     })
     const __render = Component.prototype.render;
     Component.prototype.render = function() {

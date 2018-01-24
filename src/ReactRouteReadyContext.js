@@ -1,24 +1,25 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import getHookedComponents from './getHookedComponents';
 import getHookedPromiseChain from './getHookedPromiseChain';
 import getUnreadyComponents from './getUnreadyComponents';
 
 export default class ReactRouteReadyContext extends React.Component {
   static contextTypes = {
-    store: React.PropTypes.object.isRequired
+    store: PropTypes.object.isRequired
   }
 
   static propTypes = {
-    children: React.PropTypes.node.isRequired,
-    components: React.PropTypes.array.isRequired,
-    params: React.PropTypes.object.isRequired,
-    location: React.PropTypes.object.isRequired
+    children: PropTypes.node.isRequired,
+    components: PropTypes.array.isRequired,
+    params: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired
   }
 
   static childContextTypes = {
-    reactRouteReadyLoading: React.PropTypes.bool,
-    reactRouteReadyLoaded: React.PropTypes.bool,
-    reactRouteReadyComponentStatus: React.PropTypes.object
+    reactRouteReadyLoading: PropTypes.bool,
+    reactRouteReadyLoaded: PropTypes.bool,
+    reactRouteReadyComponentStatus: PropTypes.object
   }
 
   getChildContext() {
